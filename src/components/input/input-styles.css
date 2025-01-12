@@ -1,0 +1,12 @@
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+.input-loading-spinner {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px; /* Replace with a spinner icon size if needed */
+    color: gray;
+}

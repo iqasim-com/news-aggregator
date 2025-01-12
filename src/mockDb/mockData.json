@@ -1,0 +1,12 @@
+[
+  {
+    "username": "johndoe",
+    "email": "johndoe@example.com",
+    "password": "password123",
+    "preference": {
+      "authors": ["Author1", "Author2"],
+      "categories": ["Technology", "Health"],
+      "sources": ["Source1", "Source2"]
+    }
+  }
+]
