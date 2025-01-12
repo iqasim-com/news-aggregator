@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import users from "../../mockDb/mockData.json";
 import InputComponent from "../../components/input/inputComponent.tsx";
+import {useUser} from "../../context/context.tsx";
 
 const Login = () => {
+  const { setUser } = useUser(); // Use context to set the user globally
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -15,6 +17,8 @@ const Login = () => {
     const user = users.find((user) => user.email === email && user.password === password);
 
     if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(user); // Update the context
       navigate("/dashboard", { state: { user } });
     } else {
       setError("Invalid email or password");
@@ -27,9 +31,10 @@ const Login = () => {
       <form onSubmit={handleLogin}>
         <div>
           <InputComponent
-            label={<label>Email:</label>}
+            placeholder="Email"
             name="email"
             type="email"
+            inputClass="input-styles"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -37,9 +42,10 @@ const Login = () => {
         </div>
         <div>
           <InputComponent
-            label={<label>Password:</label>}
+            placeholder="********"
             name="password"
             type="password"
+            inputClass="input-styles"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required

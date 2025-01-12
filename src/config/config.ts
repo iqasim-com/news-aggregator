@@ -1,4 +1,6 @@
 export const DEFAULT_CONFIG = {
+  appName: 'News Aggregator',
+  shortAppName: 'NA',
   news: {
     baseUrl: import.meta.env.VITE_NEWS_BASE_URL, // Base URL for News API
     apiKey: import.meta.env.VITE_NEWS_API_KEY, // API Key for News API

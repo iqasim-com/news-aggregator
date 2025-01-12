@@ -1,6 +1,9 @@
 const Dashboard = () => {
+
   return (
-    <h1>Dashboard, News feed should be here!</h1>
+    <div className="container">
+      <h1>Dashboard page</h1>
+    </div>
   )
 };
 

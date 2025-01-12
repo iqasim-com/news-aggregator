@@ -1,11 +1,17 @@
 import axios from 'axios';
-import {DEFAULT_CONFIG} from "../config/config.ts";
+import { DEFAULT_CONFIG } from "../config/config.ts";
 
-const CONFIG = DEFAULT_CONFIG.nyt
+const CONFIG = DEFAULT_CONFIG.nyt;
 
-export const fetchNYTArticles = (
-  query: string,
-) => {
-  const url = `${CONFIG}/articlesearch.json?q=${query}&api-key=${CONFIG}`;
-  return axios.get(url).then((response) => response.data.response.docs);
+/**
+ * Function for fetching NYT articles with a query and additional params
+ * @param query - User input for search
+ * @param params - Additional parameters for filtering
+ */
+export const fetchNYTArticles = (query: string, params: any) => {
+  const url = `${CONFIG.baseUrl}/articlesearch.json`;
+
+  return axios.get(url, {
+    params: { ...params, q: query, 'api-key': CONFIG.apiKey }, // Merge params
+  }).then((response) => response.data.response.docs);
 }

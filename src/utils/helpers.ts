@@ -15,6 +15,13 @@ export const normalizeArticles = (articles, source) => {
           imageUrl: article.fields?.thumbnail || "https://placehold.co/400",
           link: article.webUrl || "#",
         };
+      } else if (source === "nytApi") {
+        return {
+          title: article.headline.print_headline || "Default Title", // Map from guardianApi's structure
+          description: article.abstract || "No description available",
+          imageUrl: article.fields?.thumbnail || "https://placehold.co/400",
+          link: article.web_url || "#",
+        };
       }
       return null; // Use null instead of an empty object
     })
