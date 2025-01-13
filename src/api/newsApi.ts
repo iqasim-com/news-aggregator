@@ -3,7 +3,7 @@ import { DEFAULT_CONFIG } from "../config/config.ts";
 
 const CONFIG = DEFAULT_CONFIG.news;
 
-export const fetchNewsArticles = (query: string, params: any) => {
+export const fetchNewsArticles = (query?: string, params?: any) => {
   const url = `${CONFIG.baseUrl}/${CONFIG.endpoints.everything}`;
 
   // Attach the query parameter to include user input and other params

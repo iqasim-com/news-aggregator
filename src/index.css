@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #161616;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,9 +13,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #f1f1ff;
   text-decoration: inherit;
 }
 a:hover {
@@ -58,12 +62,23 @@ button:focus-visible {
 #root {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh; /* Full viewport height */
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  margin-top: 3.5rem;
+}
+
+.feed {
+  width: 800px;
+  max-width: 100%;
+  border-radius: 8px;
+  padding: 20px;
 }
 
 .content {
@@ -111,6 +126,10 @@ button:focus-visible {
 
 .h-100 {
   height: 100%;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
 }
 
 .d-flex {

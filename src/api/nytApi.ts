@@ -8,7 +8,7 @@ const CONFIG = DEFAULT_CONFIG.nyt;
  * @param query - User input for search
  * @param params - Additional parameters for filtering
  */
-export const fetchNYTArticles = (query: string, params: any) => {
+export const fetchNYTArticles = (query?: string, params?: any) => {
   const url = `${CONFIG.baseUrl}/articlesearch.json`;
 
   return axios.get(url, {

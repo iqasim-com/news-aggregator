@@ -1,89 +1,85 @@
-import React from 'react';
+import React, { useState } from "react";
 
-interface FiltersProps {
-  filters: {
-    query: string;
-    category: string;
-    source: string;
-    from: string;
-    to: string;
-  };
-  onChange: (updatedFilters: {
-    query?: string;
-    category?: string;
-    source?: string;
-    from?: string;
-    to?: string;
-  }) => void;
+interface FilterComponentProps {
+  onFilterChange: (filters: { date: string; author: string; category: string; source: string }) => void;
+  fetchAuthors: string[];
+  fetchCategories: string[];
+  fetchSources: string[];
 }
 
-const Filters: React.FC<FiltersProps> = ({ filters, onChange }) => {
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    onChange({ [name]: value });
+const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, fetchAuthors, fetchCategories, fetchSources }) => {
+  const [filters, setFilters] = useState({ date: "", author: "", category: "", source: "" });
+
+  const handleFilterChange = (field: string, value: string) => {
+    const updatedFilters = { ...filters, [field]: value };
+    setFilters(updatedFilters);
+    onFilterChange(updatedFilters); // Notify parent component of filter changes
   };
 
   return (
-    <div>
-      <div>
-        <label>Keyword:</label>
-        <input
-          type="text"
-          name="query"
-          value={filters.query}
-          onChange={handleInputChange}
-        />
-      </div>
-      <div>
-        <label>Category:</label>
-        <select
-          name="category"
-          value={filters.category}
-          onChange={handleInputChange}
-        >
-          <option value="">All</option>
-          <option value="technology">Technology</option>
-          <option value="sports">Sports</option>
-          <option value="business">Business</option>
-          {/* Add more categories as needed */}
-        </select>
-      </div>
-      <div>
-        <label>Source:</label>
-        <select
-          name="source"
-          value={filters.source}
-          onChange={handleInputChange}
-        >
-          <option value="">All</option>
-          <option value="bbc-news">BBC News</option>
-          <option value="cnn">CNN</option>
-          <option value="the-verge">The Verge</option>
-          {/* Add more sources as needed */}
-        </select>
-      </div>
-      <div>
-        <label>From:</label>
-        <input
-          type="date"
-          name="from"
-          value={filters.from}
-          onChange={handleInputChange}
-        />
-      </div>
-      <div>
-        <label>To:</label>
-        <input
-          type="date"
-          name="to"
-          value={filters.to}
-          onChange={handleInputChange}
-        />
+    <div style={{ marginBottom: "20px" }}>
+      <h3>Filters</h3>
+      <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+        {/* Date Input */}
+        <div>
+          <label>Date: </label>
+          <input
+            type="date"
+            value={filters.date}
+            onChange={(e) => handleFilterChange("date", e.target.value)}
+          />
+        </div>
+
+        {/* Author Dropdown */}
+        <div>
+          <label>Author: </label>
+          <select
+            value={filters.author}
+            onChange={(e) => handleFilterChange("author", e.target.value)}
+          >
+            <option value="">All</option>
+            {fetchAuthors.map((author) => (
+              <option key={author} value={author}>
+                {author}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Category Dropdown */}
+        <div>
+          <label>Category: </label>
+          <select
+            value={filters.category}
+            onChange={(e) => handleFilterChange("category", e.target.value)}
+          >
+            <option value="">All</option>
+            {fetchCategories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Source Dropdown */}
+        <div>
+          <label>Source: </label>
+          <select
+            value={filters.source}
+            onChange={(e) => handleFilterChange("source", e.target.value)}
+          >
+            <option value="">All</option>
+            {fetchSources.map((source) => (
+              <option key={source} value={source}>
+                {source}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Filters;
+export default FilterComponent;

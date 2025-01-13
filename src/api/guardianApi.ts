@@ -9,10 +9,10 @@ const CONFIG = DEFAULT_CONFIG.guardian;
  * @param query - User input for search
  * @param params - Additional parameters for filtering
  */
-export const fetchGuardianArticles = (query: string, params: any) => {
-  const url = `${CONFIG.baseUrl}/${CONFIG.endpoints.search}`;
+export const fetchGuardianArticles = (query?: string, params?: any) => {
+  const url = `${CONFIG.baseUrl}/${CONFIG.endpoints.search}?show-fields=byline`;
 
   return axios.get(url, {
     params: { ...params, q: query, 'api-key': CONFIG.apiKey }, // Merge params
   }).then((response) => response.data.response.results);
-};
+}

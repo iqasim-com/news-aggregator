@@ -6,11 +6,6 @@
     background-color: #fff;
 }
 
-.card-component:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-}
-
 .card-image {
     width: 100%;
     height: 250px;
@@ -31,12 +26,10 @@
 
 .card-description {
     font-size: 1rem;
-    color: #555;
+    color: #b1b1b1;
 }
 
 .card-footer {
     padding: 16px;
-    border-top: 1px solid #e0e0e0;
-    background-color: #f9f9f9;
     text-align: right;
 }

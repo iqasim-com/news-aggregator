@@ -7,6 +7,7 @@ const CardComponent: React.FC<CardProps> = (
     title,
     description,
     imageUrl,
+    footer,
     onClick,
     className = '',
   }: CardProps) => {
@@ -22,6 +23,7 @@ const CardComponent: React.FC<CardProps> = (
       <div className="card-content">
         {title}
         {description && <p className="card-description">{description}</p>}
+        {footer && <div className="card-footer">{footer}</div>}
       </div>
     </div>
   );

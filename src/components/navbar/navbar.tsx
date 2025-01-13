@@ -3,18 +3,16 @@ import { Link } from "react-router-dom";
 import "./navbar-styles.css";
 import {DEFAULT_CONFIG} from "../../config/config.ts";
 import {useUser} from "../../context/context.tsx";
+import Modal from "../modal/modal.tsx";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const {user, setUser} = useUser()
+  const {user, setUser, logout} = useUser()
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
-
-  const logout = () => {
-    setUser(null);
-  }
 
   return (
     <nav className="navbar">
@@ -40,12 +38,24 @@ const Navbar = () => {
         <li>
           <img src={user.avatar} width="30" alt={user.name}/>
         </li>
+        <li>
+          <button onClick={() => setIsModalOpen(true)}>Feed Customization</button>
+        </li>
       </ul>
       <div className="navbar-toggle" onClick={toggleNavbar}>
         <span></span>
         <span></span>
         <span></span>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="My Modal"
+      >
+        <p>This is the content of the modal.</p>
+        <button onClick={() => setIsModalOpen(false)}>Close</button>
+      </Modal>
     </nav>
   );
 };

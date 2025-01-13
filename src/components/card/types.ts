@@ -1,11 +1,8 @@
-import {ReactElement} from "react";
-
 export interface CardProps {
-  title: ReactElement;
+  title: React.ReactNode;
   description?: string;
   imageUrl?: string;
   footer?: React.ReactNode;
   onClick?: () => void;
   className?: string;
-  fullLink?: string;
 }
