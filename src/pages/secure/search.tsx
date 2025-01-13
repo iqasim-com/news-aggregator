@@ -40,7 +40,7 @@ const Search = () => {
   });
 
   return user ? (
-    <div className="container">
+    <div className="container-fluid">
       <div className="content">
         <div className="text-center">
           <h1>Search Articles</h1>

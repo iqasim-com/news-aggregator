@@ -47,6 +47,9 @@ const Dashboard = () => {
               }
               description={truncateDescription(article.description, 20)}
               imageUrl={article.imageUrl}
+              footer={
+                <span className="badge badge-info">{article.source}</span>
+              }
             />
           ))}
       </div>

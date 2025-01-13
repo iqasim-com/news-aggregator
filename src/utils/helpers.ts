@@ -32,15 +32,15 @@ export const normalizeArticles = (articles, source) => {
       } else if (source === "nytApi") {
         getAuthorsGategoriesAndSources(article.byline.original || "Unknown", 'author')
         getAuthorsGategoriesAndSources(article.news_desk || "Unknown", 'category')
-        getAuthorsGategoriesAndSources(article.source?.name || "Unknown", 'source');
+        getAuthorsGategoriesAndSources(article.source || "Unknown", 'source');
         return {
           title: article.headline.main || "Default Title", // Map from guardianApi's structure
           description: article.abstract || "No description available",
           imageUrl: article.fields?.thumbnail || "https://placehold.co/400",
           link: article.web_url || "#",
           author: article.byline.original || "Unknown",
-          category: article.news_desk || "Unknown",
-          source: article.source?.name || "Unknown",
+          category: article.section_name || "Unknown",
+          source: article.source || "Unknown",
           publishedAt: formatDate(article.pub_date) || "Unknown",
         };
       }

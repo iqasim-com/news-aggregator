@@ -6,13 +6,13 @@ import { normalizeArticles, collection } from "../utils/helpers";
 
 export const fetchArticlesService = async (searchTerm?: string) => {
   try {
-    const [ guardianResponse, nytResponse] = await Promise.all([
-      // fetchNewsArticles(searchTerm, {}),
+    const [newsApiResponse, guardianResponse, nytResponse] = await Promise.all([
+      fetchNewsArticles(searchTerm || 'a', {}),
       fetchGuardianArticles(searchTerm, {}),
       fetchNYTArticles(searchTerm, {}),
     ]);
 
-    // const newsApiArticles = normalizeArticles(newsApiResponse, "newsApi");
+    const newsApiArticles = normalizeArticles(newsApiResponse, "newsApi");
     const guardianArticles = normalizeArticles(guardianResponse, "guardianApi");
     const nytArticles = normalizeArticles(nytResponse, "nytApi");
 
@@ -22,7 +22,7 @@ export const fetchArticlesService = async (searchTerm?: string) => {
     const sourcesArray = Array.from(collection.sources);
 
     return {
-      articles: [...guardianArticles, ...nytArticles],
+      articles: [...newsApiArticles, ...guardianArticles, ...nytArticles],
       filterData: {
         authors: authorsArray,
         categories: categoriesArray,
