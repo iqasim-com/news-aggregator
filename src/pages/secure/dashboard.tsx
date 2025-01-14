@@ -55,18 +55,17 @@ const Dashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   return (
     <div className="container custom-top-padding">
       <div className="row justify-content-lg-center">
-        <div className="col col-md-6 col-lg-6">
-          <div className="mb-3">
-            <h1>News Feed</h1>
-            <p>News being filtered based on your current customization:</p>
+        <div className="col-lg-6">
+          <div>
+            <h1>Current Customization</h1>
           </div>
           <div className="preferences d-flex flex-column">
-            {user?.preferences?.authors?.length > 0 && (
+          {user?.preferences?.authors?.length > 0 && (
               <div className="mb-2">
                 <strong>Authors:</strong>
                 {user.preferences.authors.map((author, index) => (
@@ -96,6 +95,11 @@ const Dashboard = () => {
                 ))}
               </div>
             )}
+          </div>
+        </div>
+        <div className="col col-md-6 col-lg-6">
+          <div className="mb-3">
+            <h1>News Feed</h1>
           </div>
           <div>
             {isLoading && (

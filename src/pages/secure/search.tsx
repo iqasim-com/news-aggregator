@@ -74,7 +74,7 @@ const Search = () => {
         ) : (
           <>
             {filteredArticles.map((article, index) => (
-              <div className="col-6 col-lg-4 p-2">
+              <div className="col col-lg-6 p-2">
                 <CardComponent
                   key={index}
                   title={
