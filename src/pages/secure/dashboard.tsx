@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {fetchArticlesService} from "../../services/articleService";
 import CardComponent from "../../components/card/card";
 import {truncateDescription} from "../../utils/helpers";
 import {useUser} from "../../context/context.tsx";
+import PreferencesDisplay from "../../components/preferenceDisplay/preferenceDisplay.tsx";
 
 const Dashboard = () => {
   const {user} = useUser();
@@ -16,7 +17,7 @@ const Dashboard = () => {
     }
   }, [user]);
 
-  const fetchArticles = async (searchTerm) => {
+  const fetchArticles = async (searchTerm?: string) => {
     setIsLoading(true);
     setErrorMessage("");
 
@@ -65,36 +66,23 @@ const Dashboard = () => {
             <h1>Current Customization</h1>
           </div>
           <div className="preferences d-flex flex-column">
-          {user?.preferences?.authors?.length > 0 && (
-              <div className="mb-2">
-                <strong>Authors:</strong>
-                {user.preferences.authors.map((author, index) => (
-                  <span key={index} className="badge badge-primary m-1">
-                  {author}
-                </span>
-                ))}
-              </div>
-            )}
-            {user?.preferences?.categories?.length > 0 && (
-              <div className="mb-2">
-                <strong>Categories:</strong>
-                {user.preferences.categories.map((category, index) => (
-                  <span key={index} className="badge badge-secondary m-1">
-                  {category}
-                </span>
-                ))}
-              </div>
-            )}
-            {user?.preferences?.sources?.length > 0 && (
-              <div className="mb-2">
-                <strong>Sources:</strong>
-                {user.preferences.sources.map((source, index) => (
-                  <span key={index} className="badge badge-info m-1">
-                  {source}
-                </span>
-                ))}
-              </div>
-            )}
+            <div className="preferences d-flex flex-column">
+              <PreferencesDisplay
+                label="Authors"
+                values={user?.preferences?.authors}
+                badgeClass="badge-primary"
+              />
+              <PreferencesDisplay
+                label="Categories"
+                values={user?.preferences?.categories}
+                badgeClass="badge-secondary"
+              />
+              <PreferencesDisplay
+                label="Sources"
+                values={user?.preferences?.sources}
+                badgeClass="badge-info"
+              />
+            </div>
           </div>
         </div>
         <div className="col col-md-6 col-lg-6">
