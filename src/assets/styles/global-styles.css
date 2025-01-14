@@ -1,0 +1,7 @@
+@import "utilities.css";
+@import "responsive.css";
+@import "design-system.css";
+
+.custom-top-padding {
+    padding-top: 5rem;
+}

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { fetchArticlesService } from "../../services/articleService";
+import React, {useEffect, useState} from "react";
+import {fetchArticlesService} from "../../services/articleService";
 import CardComponent from "../../components/card/card";
-import { truncateDescription } from "../../utils/helpers";
-import { useUser } from "../../context/context.tsx";
+import {truncateDescription} from "../../utils/helpers";
+import {useUser} from "../../context/context.tsx";
 
 const Dashboard = () => {
-  const { user } = useUser();
-  const { articles, setArticles, setFilterData } = useUser();
+  const {user} = useUser();
+  const {articles, setArticles, setFilterData} = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -16,17 +16,16 @@ const Dashboard = () => {
     }
   }, [user]);
 
-  const fetchArticles = async (searchTerm?: string) => {
+  const fetchArticles = async (searchTerm) => {
     setIsLoading(true);
     setErrorMessage("");
 
     try {
-      const { articles: fetchedArticles, filterData: fetchedFilterData } =
+      const {articles: fetchedArticles, filterData: fetchedFilterData} =
         await fetchArticlesService(searchTerm);
 
       let filteredArticles = fetchedArticles;
 
-      // Check if preferences exist and are not empty
       if (
         user.preferences &&
         (user.preferences.authors.length > 0 ||
@@ -47,8 +46,8 @@ const Dashboard = () => {
         });
       }
 
-      setArticles(filteredArticles); // Update articles in context
-      setFilterData(fetchedFilterData); // Update filterData in context
+      setArticles(filteredArticles);
+      setFilterData(fetchedFilterData);
     } catch (error) {
       setErrorMessage(
         error.message || "Failed to fetch articles. Please try again later."
@@ -59,63 +58,80 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="container">
-      <div>
-        <h1>News Feed</h1>
-        <p>News being filtered based on your current customization:</p>
-        <div className="preferences">
-          {user?.preferences?.authors?.length > 0 && (
-            <div>
-              <strong>Authors:</strong>
-              {user.preferences.authors.map((author, index) => (
-                <span key={index} className="badge badge-primary m-1">
+    <div className="container custom-top-padding">
+      <div className="row justify-content-lg-center">
+        <div className="col col-md-6 col-lg-6">
+          <div className="mb-3">
+            <h1>News Feed</h1>
+            <p>News being filtered based on your current customization:</p>
+          </div>
+          <div className="preferences d-flex flex-column">
+            {user?.preferences?.authors?.length > 0 && (
+              <div className="mb-2">
+                <strong>Authors:</strong>
+                {user.preferences.authors.map((author, index) => (
+                  <span key={index} className="badge badge-primary m-1">
                   {author}
                 </span>
-              ))}
-            </div>
-          )}
-          {user?.preferences?.categories?.length > 0 && (
-            <div>
-              <strong>Categories:</strong>
-              {user.preferences.categories.map((category, index) => (
-                <span key={index} className="badge badge-secondary m-1">
+                ))}
+              </div>
+            )}
+            {user?.preferences?.categories?.length > 0 && (
+              <div className="mb-2">
+                <strong>Categories:</strong>
+                {user.preferences.categories.map((category, index) => (
+                  <span key={index} className="badge badge-secondary m-1">
                   {category}
                 </span>
-              ))}
-            </div>
-          )}
-          {user?.preferences?.sources?.length > 0 && (
-            <div>
-              <strong>Sources:</strong>
-              {user.preferences.sources.map((source, index) => (
-                <span key={index} className="badge badge-info m-1">
+                ))}
+              </div>
+            )}
+            {user?.preferences?.sources?.length > 0 && (
+              <div className="mb-2">
+                <strong>Sources:</strong>
+                {user.preferences.sources.map((source, index) => (
+                  <span key={index} className="badge badge-info m-1">
                   {source}
                 </span>
+                ))}
+              </div>
+            )}
+          </div>
+          <div>
+            {isLoading && (
+              <div>
+                <p className="loading text-center">Loading articles...</p>
+              </div>
+            )}
+            {errorMessage && (
+              <div>
+                <p className="error text-center">{errorMessage}</p>
+              </div>
+            )}
+            {!isLoading &&
+              articles.map((article, index) => (
+                <div key={index} className="mb-4">
+                  <CardComponent
+                    title={
+                      <a
+                        href={article.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover-shadow"
+                      >
+                        <h3>{article.title}</h3>
+                      </a>
+                    }
+                    description={truncateDescription(article.description, 20)}
+                    imageUrl={article.imageUrl}
+                    footer={
+                      <span className="badge badge-info">{article.source}</span>
+                    }
+                  />
+                </div>
               ))}
-            </div>
-          )}
+          </div>
         </div>
-      </div>
-      <div className="feed">
-        {isLoading && <p className="loading">Loading articles...</p>}
-        {errorMessage && <p className="error">{errorMessage}</p>}
-        {!isLoading &&
-          articles.map((article, index) => (
-            <CardComponent
-              key={index}
-              className="mb-4"
-              title={
-                <a href={article.link} target="_blank" rel="noopener noreferrer">
-                  <h3>{article.title}</h3>
-                </a>
-              }
-              description={truncateDescription(article.description, 20)}
-              imageUrl={article.imageUrl}
-              footer={
-                <span className="badge badge-info">{article.source}</span>
-              }
-            />
-          ))}
       </div>
     </div>
   );

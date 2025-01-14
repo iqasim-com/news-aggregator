@@ -1,9 +1,7 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import users from "../../mockDb/mockData.json";
-import InputComponent from "../../components/input/inputComponent.tsx";
-import {useUser} from "../../context/context.tsx";
+import { useUser } from "../../context/context.tsx";
 
 const Login = () => {
   const { setUser } = useUser(); // Use context to set the user globally
@@ -30,35 +28,36 @@ const Login = () => {
   };
 
   return (
-    <div className="h-100 d-flex align-items-center justify-content-center flex-direction-column">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <InputComponent
-            placeholder="Email"
-            name="email"
-            type="email"
-            inputClass="input-styles"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <InputComponent
-            placeholder="********"
-            name="password"
-            type="password"
-            inputClass="input-styles"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {/*TODO: Create component*/}
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit">Login</button>
-      </form>
+    <div className="container h-100 d-flex align-items-center justify-content-center">
+      <div className="col-4 col-md-4">
+        <h2 className="mb-4">Login</h2>
+        <form onSubmit={handleLogin}>
+          <div className="mb-3">
+            <input
+              placeholder="Email"
+              name="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="input"
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              placeholder="Password"
+              name="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="input"
+            />
+          </div>
+          {error && <p className="text-danger">{error}</p>}
+          <button type="submit" className="btn w-100">Login</button>
+        </form>
+      </div>
     </div>
   );
 };
