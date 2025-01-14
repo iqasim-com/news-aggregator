@@ -288,6 +288,7 @@ a:hover {
     flex-wrap: nowrap;
 }
 
+/* Card */
 .card-component {
     border-radius: 8px;
     box-shadow: 0 4px 12px rgb(37 33 33 / 83%);
@@ -322,4 +323,9 @@ a:hover {
 .card-footer {
     padding: 16px;
     text-align: right;
+}
+
+/* Text */
+.text-danger {
+    color: crimson;
 }

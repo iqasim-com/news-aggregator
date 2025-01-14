@@ -1,6 +1,6 @@
-const Toast = (message: string) => (
+const Toast = ({message, className}: {message: string | null, className: string}) => (
   <div className="toast">
-    <p>{message}</p>
+    <p className={className}>{message}</p>
   </div>
 )
 

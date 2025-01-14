@@ -1,11 +1,13 @@
 import React, {ChangeEvent, useState} from "react";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import "./navbar-styles.css";
-import { DEFAULT_CONFIG } from "../../config/config.ts";
-import { useUser } from "../../context/context.tsx";
+import {DEFAULT_CONFIG} from "../../config/config.ts";
+import {useUser} from "../../context/context.tsx";
 import Modal from "../modal/modal.tsx";
 import SelectableList from "../selectableList/SelectableList.tsx";
 import {PREFERENCE_TYPES} from "../../config/constants.ts";
+import Button from "../button/button.tsx";
+import ListItem from "../listItem/listItem.tsx";
 
 /**
  * Navbar component responsible for rendering the navigation bar.
@@ -22,7 +24,7 @@ const Navbar = () => {
     sources: [] as string[],
   });
   // @ts-expect-error/ban-app-build
-  const { user, setUser, logout, filterData } = useUser();
+  const {user, setUser, logout, filterData} = useUser();
   const handleNavbarToggle = () => setIsNavbarOpen((prev) => !prev);
   const handleModalClose = () => setIsModalOpen(false);
 
@@ -68,7 +70,7 @@ const Navbar = () => {
           : user.preferences.sources,
       };
 
-      const updatedUser = { ...user, preferences: updatedPreferences };
+      const updatedUser = {...user, preferences: updatedPreferences};
       setUser(updatedUser);
       localStorage.setItem(`user${user.id}`, JSON.stringify(updatedUser));
       handleModalClose();
@@ -81,57 +83,65 @@ const Navbar = () => {
         <Link to="/">{DEFAULT_CONFIG.shortAppName}</Link>
       </div>
       <ul className={`navbar-links ${isNavbarOpen ? "active" : ""}`}>
-        <li>
-          <button onClick={() => setIsModalOpen(true)}>Personalize news feed</button>
-        </li>
-        <li>
+        <ListItem>
+          <Button onClick={() => setIsModalOpen(true)}>Personalize news feed</Button>
+        </ListItem>
+        <ListItem>
           <Link to="/dashboard" onClick={() => setIsNavbarOpen(false)}>
             Home
           </Link>
-        </li>
-        <li>
+        </ListItem>
+        <ListItem>
           <Link to="/search" onClick={() => setIsNavbarOpen(false)}>
             Search
           </Link>
-        </li>
-        <li>
+        </ListItem>
+        <ListItem>
           <Link to="/login" onClick={logout}>Logout</Link>
-        </li>
-        <li>
-          <img src={user?.avatar} width="30" alt={user?.name || "User"} />
-        </li>
+        </ListItem>
+        <ListItem>
+          <img src={user?.avatar} width="30" alt={user?.name || "User"}/>
+        </ListItem>
       </ul>
       <div className="navbar-toggle" onClick={handleNavbarToggle}>
         <span></span>
         <span></span>
         <span></span>
       </div>
-      <Modal isOpen={isModalOpen} onClose={handleModalClose} title="Feed Customization">
-        <form>
-          <SelectableList
-            label="Select Authors"
-            id={PREFERENCE_TYPES.AUTHORS}
-            options={filterData.authors}
-            value={selectedPreferences.authors}
-            onChange={(e: ChangeEvent<HTMLSelectElement>): void => handleSelectableChange(e, PREFERENCE_TYPES.AUTHORS)}
-          />
-          <SelectableList
-            label="Select Categories"
-            id={PREFERENCE_TYPES.CATEGORIES}
-            options={filterData.categories}
-            value={selectedPreferences.categories}
-            onChange={(e: ChangeEvent<HTMLSelectElement>): void => handleSelectableChange(e, PREFERENCE_TYPES.CATEGORIES)}
-          />
-          <SelectableList
-            label="Select Sources"
-            id={PREFERENCE_TYPES.SOURCES}
-            options={filterData.sources}
-            value={selectedPreferences.sources}
-            onChange={(e: ChangeEvent<HTMLSelectElement>): void => handleSelectableChange(e, PREFERENCE_TYPES.SOURCES)}
-          />
-          <button type="button" onClick={handleSavePreferences}>
+      <Modal isOpen={isModalOpen} onClose={handleModalClose} title="Personalized Feed">
+        <form className="py-4">
+          <div className="mb-4">
+            <div className="mb-3">
+              <SelectableList
+                label="Select Authors"
+                id={PREFERENCE_TYPES.AUTHORS}
+                options={filterData.authors}
+                value={selectedPreferences.authors}
+                onChange={(e: ChangeEvent<HTMLSelectElement>): void => handleSelectableChange(e, PREFERENCE_TYPES.AUTHORS)}
+              />
+            </div>
+            <div className="mb-3">
+              <SelectableList
+                label="Select Categories"
+                id={PREFERENCE_TYPES.CATEGORIES}
+                options={filterData.categories}
+                value={selectedPreferences.categories}
+                onChange={(e: ChangeEvent<HTMLSelectElement>): void => handleSelectableChange(e, PREFERENCE_TYPES.CATEGORIES)}
+              />
+            </div>
+            <div className="mb-3">
+              <SelectableList
+                label="Select Sources"
+                id={PREFERENCE_TYPES.SOURCES}
+                options={filterData.sources}
+                value={selectedPreferences.sources}
+                onChange={(e: ChangeEvent<HTMLSelectElement>): void => handleSelectableChange(e, PREFERENCE_TYPES.SOURCES)}
+              />
+            </div>
+          </div>
+          <Button type="button" onClick={handleSavePreferences}>
             Save Preferences
-          </button>
+          </Button>
         </form>
       </Modal>
     </nav>

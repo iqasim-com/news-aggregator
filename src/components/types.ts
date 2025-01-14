@@ -1,4 +1,4 @@
-import {ChangeEvent, ReactElement} from "react";
+import React, {ChangeEvent, ReactElement} from "react";
 
 
 export interface SelectableListProps {
@@ -39,4 +39,18 @@ export interface CardProps {
   footer?: React.ReactNode;
   onClick?: () => void;
   className?: string;
+}
+
+export interface ButtonProps {
+  type?: "button" | "submit" | "reset";
+  onClick?: () => void;
+  children: React.ReactNode;
+  className?: string;
+  disabled?: boolean;
+}
+
+export interface ListItemProps {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
 }

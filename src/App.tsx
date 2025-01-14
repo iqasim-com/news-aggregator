@@ -1,12 +1,15 @@
-import AppRouter from "./routes/appRoutes.tsx";
+import { BrowserRouter as Router } from "react-router-dom";
+import AppContent from "./routes/appRoutes.tsx";
 import {UserProvider} from "./context/context.tsx";
 
-function App() {
+const AppRouter = () => {
   return (
     <UserProvider>
-      <AppRouter />
+      <Router>
+        <AppContent />
+      </Router>
     </UserProvider>
-  );
+  )
 }
 
-export default App;
+export default AppRouter;

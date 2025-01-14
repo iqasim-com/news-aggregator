@@ -1,32 +1,26 @@
-import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
-import Login from "../pages/public/login.tsx";
-import Dashboard from "../pages/secure/dashboard.tsx";
+// src/AppContent.tsx
+import { Routes, Route } from "react-router-dom";
+import routes from "./routes.tsx";
 import Navbar from "../components/navbar/navbar.tsx";
-import Search from "../pages/secure/search.tsx";
 import {useUser} from "../context/context.tsx";
+import {ReactElement} from "react"; // Import the route configuration
 
 const AppContent = () => {
-  const {user} = useUser()!;
+  const { user } = useUser()!;
+
+  console.log('routes', user)
 
   return (
     <>
-      {user?.isLoggedIn && <Navbar/>}
+      {user?.isLoggedIn && <Navbar />}
+      {/* Dynamically map the routes */}
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace/>}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/dashboard" element={<Dashboard/>}/>
-        <Route path="/search" element={<Search/>}/>
+        {routes.map(({ path, element }: {path: string, element: ReactElement}, index: number) => (
+          <Route key={index} path={path} element={element} />
+        ))}
       </Routes>
     </>
   );
 };
 
-const AppRouter = () => {
-  return (
-    <Router>
-      <AppContent/>
-    </Router>
-  );
-};
-
-export default AppRouter;
+export default AppContent;
