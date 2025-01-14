@@ -4,10 +4,16 @@ import CardComponent from "../../components/card/card";
 import {truncateDescription} from "../../utils/helpers";
 import {useUser} from "../../context/context.tsx";
 import PreferencesDisplay from "../../components/preferenceDisplay/preferenceDisplay.tsx";
+import {Article} from "../../utils/types.ts";
 
+/**
+ * The Dashboard component is responsible for rendering a customized dashboard
+ * displaying user preferences and a news feed. It enables users to view their
+ * preferred authors, categories, and sources and provides a news feed filtered
+ * based on these preferences.
+ */
 const Dashboard = () => {
-  const {user} = useUser();
-  const {articles, setArticles, setFilterData} = useUser();
+  const { user, articles, setArticles, setFilterData } = useUser()!;
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -17,6 +23,14 @@ const Dashboard = () => {
     }
   }, [user]);
 
+  /**
+   * Asynchronously fetches articles based on the provided search term and user preferences.
+   * Updates the loading state, error message, fetched articles, and filter data.
+   * Filters the fetched articles according to the user's preferences for authors, categories, and sources if any preferences are set.
+   *
+   * @param {string} [searchTerm] - An optional search term used to query the articles.
+   * @returns {Promise<void>} A promise that represents the completion of the fetch operation.
+   */
   const fetchArticles = async (searchTerm?: string) => {
     setIsLoading(true);
     setErrorMessage("");
@@ -25,22 +39,22 @@ const Dashboard = () => {
       const {articles: fetchedArticles, filterData: fetchedFilterData} =
         await fetchArticlesService(searchTerm);
 
-      let filteredArticles = fetchedArticles;
+      let filteredArticles: any = fetchedArticles;
 
       if (
-        user.preferences &&
+        user?.preferences &&
         (user.preferences.authors.length > 0 ||
           user.preferences.categories.length > 0 ||
           user.preferences.sources.length > 0)
       ) {
-        filteredArticles = fetchedArticles.filter((article) => {
-          const matchesAuthor = user.preferences.authors.some((author) =>
+        filteredArticles = fetchedArticles.filter((article: any) => {
+          const matchesAuthor = user.preferences.authors.some((author: string) =>
             article.authors?.includes(author)
           );
-          const matchesCategory = user.preferences.categories.some((category) =>
+          const matchesCategory = user.preferences.categories.some((category: string) =>
             article.categories?.includes(category)
           );
-          const matchesSource = user.preferences.sources.some((source) =>
+          const matchesSource = user.preferences.sources.some((source: string) =>
             article.source?.includes(source)
           );
           return matchesAuthor || matchesCategory || matchesSource;
@@ -51,7 +65,7 @@ const Dashboard = () => {
       setFilterData(fetchedFilterData);
     } catch (error) {
       setErrorMessage(
-        error.message || "Failed to fetch articles. Please try again later."
+        "Failed to fetch articles. Please try again later."
       );
     } finally {
       setIsLoading(false);
@@ -101,7 +115,7 @@ const Dashboard = () => {
               </div>
             )}
             {!isLoading &&
-              articles.map((article, index) => (
+              articles.map((article: Article, index) => (
                 <div key={index} className="mb-4">
                   <CardComponent
                     title={

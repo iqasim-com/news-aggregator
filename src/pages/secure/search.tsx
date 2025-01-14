@@ -6,30 +6,59 @@ import CardComponent from "../../components/card/card";
 import {useUser} from "../../context/context";
 import FilterComponent from "../../components/filters/filters";
 import {truncateDescription} from "../../utils/helpers";
+import {Link} from "react-router-dom";
+import {Article} from "../../utils/types.ts";
 
+/**
+ * The Search component provides functionality to search for articles based on a search term
+ * and apply various filters such as date, author, category, and source.
+ * It displays the search results along with filter options for further refinement.
+ * The component manages state for articles, filters, loading status, and error messages.
+ * Users must be logged in to access this functionality.
+ */
 const Search = () => {
-  const {user} = useUser();
+  const {user} = useUser()!;
   const [filters, setFilters] = useState({date: "", author: "", category: "", source: ""});
   const [filterData, setFilterData] = useState({authors: [], categories: [], sources: []});
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  /**
+   * Fetches a list of articles based on the provided search term.
+   * Sets the application state to handle loading, errors, and fetched data such as articles and filter information.
+   *
+   * @async
+   * @function fetchArticles
+   * @param {string} [searchTerm]
+   * @returns {Promise<void>}
+   * @throws {Error}
+   */
   const fetchArticles = async (searchTerm?: string) => {
     setIsLoading(true);
     setErrorMessage("");
     try {
-      const {articles, filterData} = await fetchArticlesService(searchTerm);
+      const {articles, filterData}: any = await fetchArticlesService(searchTerm);
       setArticles(articles);
       setFilterData(filterData);
     } catch (error) {
-      setErrorMessage(error.message || "Failed to fetch articles. Please try again later.");
+      setErrorMessage("Failed to fetch articles. Please try again later.");
     } finally {
       setIsLoading(false);
     }
   }
 
-  const filteredArticles = articles.filter((article) => {
+  /**
+   * A filtered set of articles based on specified filter criteria.
+   *
+   * The variable `filteredArticles` is derived by applying a filter operation on the `articles` array.
+   * It evaluates each article against the provided filters: `date`, `author`, `category`, and `source`.
+   *
+   * Each filter is optional. If a filter is not provided (falsy value), it is ignored in the filtering process.
+   *
+   * @type {Array<Object>}
+   */
+  const filteredArticles = articles.filter((article: any) => {
     const {date, author, category, source} = filters;
     return (
       (!date || article.publishedAt.startsWith(date)) &&
@@ -100,7 +129,14 @@ const Search = () => {
       </div>
     </div>
   ) : (
-    <p>User not found. Please log in to access the dashboard.</p>
+    <>
+      <div className="d-flex justify-content-center align-items-center h-100 flex-column">
+        <p className="mb-3">User not found. Please log in to access News.</p>
+        <Link to={'/login'}>
+          <button>Login</button>
+        </Link>
+      </div>
+    </>
   );
 };
 

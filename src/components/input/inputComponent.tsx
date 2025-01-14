@@ -1,7 +1,7 @@
 import React, { useMemo, ChangeEvent } from 'react';
-import { InputComponentProps } from "./types";
 import { debounce } from "../../utils/debounce"; // Adjust the relative path accordingly
 import './input-styles.css';
+import {InputComponentProps} from "../types.ts";
 
 /**
  * A reusable React input component with debounce functionality,

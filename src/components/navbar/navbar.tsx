@@ -1,44 +1,78 @@
-import React, { useState } from "react";
+import React, {ChangeEvent, useState} from "react";
 import { Link } from "react-router-dom";
 import "./navbar-styles.css";
 import { DEFAULT_CONFIG } from "../../config/config.ts";
 import { useUser } from "../../context/context.tsx";
 import Modal from "../modal/modal.tsx";
+import SelectableList from "../selectableList/SelectableList.tsx";
+import {PREFERENCE_TYPES} from "../../config/constants.ts";
 
+/**
+ * Navbar component responsible for rendering the navigation bar.
+ *
+ * Returns:
+ * - JSX to render the navigation bar, including the logo, navigation links, and the feed customization modal.
+ */
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { user, setUser, logout, filterData } = useUser();
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPreferences, setSelectedPreferences] = useState({
+    authors: [] as string[],
+    categories: [] as string[],
+    sources: [] as string[],
+  });
+  // @ts-expect-error/ban-app-build
+  const { user, setUser, logout, filterData } = useUser();
+  const handleNavbarToggle = () => setIsNavbarOpen((prev) => !prev);
+  const handleModalClose = () => setIsModalOpen(false);
 
-  const toggleNavbar = () => {
-    setIsOpen(!isOpen);
+  /**
+   * Handles the change event for a selectable HTML element, such as a `<select>` with multiple options.
+   * Updates the state with the selected values for the specific type.
+   *
+   * @param {React.ChangeEvent<HTMLSelectElement>} e - The change event triggered by the selectable element.
+   * @param {string} type - The category or key to update within the preferences state.
+   */
+  const handleSelectableChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    type: string
+  ) => {
+    const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
+    setSelectedPreferences((prev) => ({
+      ...prev,
+      [type]: selectedOptions,
+    }));
   };
 
-  const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedSources, setSelectedSources] = useState<string[]>([]);
-
+  /**
+   * Updates and saves user preferences based on selected preferences.
+   *
+   * The function checks if a user exists and then updates their preferences
+   * (authors, categories, and sources) by prioritizing the selectedPreferences.
+   * If no selected preferences are provided in a category, the existing user
+   * preferences are retained. The updated preferences are saved to both
+   * the local state via the `setUser` function and local storage.
+   * Finally, the associated modal is closed by invoking `handleModalClose`.
+   */
   const handleSavePreferences = () => {
     if (user) {
-      const updatedUser = {
-        ...user,
-        preferences: {
-          authors: selectedAuthors.length ? selectedAuthors : user.preferences.authors,
-          categories: selectedCategories.length ? selectedCategories : user.preferences.categories,
-          sources: selectedSources.length ? selectedSources : user.preferences.sources,
-        },
+      const updatedPreferences = {
+        authors: selectedPreferences.authors.length
+          ? selectedPreferences.authors
+          : user.preferences.authors,
+        categories: selectedPreferences.categories.length
+          ? selectedPreferences.categories
+          : user.preferences.categories,
+        sources: selectedPreferences.sources.length
+          ? selectedPreferences.sources
+          : user.preferences.sources,
       };
 
+      const updatedUser = { ...user, preferences: updatedPreferences };
       setUser(updatedUser);
-
       localStorage.setItem(`user${user.id}`, JSON.stringify(updatedUser));
-      setIsModalOpen(false);
+      handleModalClose();
     }
-  };
-
-  const handleMultiSelectChange = (e: React.ChangeEvent<HTMLSelectElement>, setter: React.Dispatch<React.SetStateAction<string[]>>) => {
-    const options = Array.from(e.target.selectedOptions, (option) => option.value);
-    setter(options);
   };
 
   return (
@@ -46,15 +80,19 @@ const Navbar = () => {
       <div className="navbar-logo">
         <Link to="/">{DEFAULT_CONFIG.shortAppName}</Link>
       </div>
-      <ul className={`navbar-links ${isOpen ? "active" : ""}`}>
+      <ul className={`navbar-links ${isNavbarOpen ? "active" : ""}`}>
         <li>
-          <button onClick={() => setIsModalOpen(true)}>Feed Customization</button>
+          <button onClick={() => setIsModalOpen(true)}>Personalize news feed</button>
         </li>
         <li>
-          <Link to="/dashboard" onClick={() => setIsOpen(false)}>Home</Link>
+          <Link to="/dashboard" onClick={() => setIsNavbarOpen(false)}>
+            Home
+          </Link>
         </li>
         <li>
-          <Link to="/search" onClick={() => setIsOpen(false)}>Search</Link>
+          <Link to="/search" onClick={() => setIsNavbarOpen(false)}>
+            Search
+          </Link>
         </li>
         <li>
           <Link to="/login" onClick={logout}>Logout</Link>
@@ -63,62 +101,34 @@ const Navbar = () => {
           <img src={user?.avatar} width="30" alt={user?.name || "User"} />
         </li>
       </ul>
-      <div className="navbar-toggle" onClick={toggleNavbar}>
+      <div className="navbar-toggle" onClick={handleNavbarToggle}>
         <span></span>
         <span></span>
         <span></span>
       </div>
-
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Feed Customization">
+      <Modal isOpen={isModalOpen} onClose={handleModalClose} title="Feed Customization">
         <form>
-          <div className="custom-select">
-            <label htmlFor="authors">Select Authors:</label>
-            <select
-              id="authors"
-              multiple
-              value={selectedAuthors}
-              onChange={(e) => handleMultiSelectChange(e, setSelectedAuthors)}
-            >
-              {filterData.authors.map((author, index) => (
-                <option key={index} value={author}>
-                  {author}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="custom-select">
-            <label htmlFor="categories">Select Categories:</label>
-            <select
-              id="categories"
-              multiple
-              value={selectedCategories}
-              onChange={(e) => handleMultiSelectChange(e, setSelectedCategories)}
-            >
-              {filterData.categories.map((category, index) => (
-                <option key={index} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="custom-select">
-            <label htmlFor="sources">Select Sources:</label>
-            <select
-              id="sources"
-              multiple
-              value={selectedSources}
-              onChange={(e) => handleMultiSelectChange(e, setSelectedSources)}
-            >
-              {filterData.sources.map((source, index) => (
-                <option key={index} value={source}>
-                  {source}
-                </option>
-              ))}
-            </select>
-          </div>
-
+          <SelectableList
+            label="Select Authors"
+            id={PREFERENCE_TYPES.AUTHORS}
+            options={filterData.authors}
+            value={selectedPreferences.authors}
+            onChange={(e: ChangeEvent<HTMLSelectElement>): void => handleSelectableChange(e, PREFERENCE_TYPES.AUTHORS)}
+          />
+          <SelectableList
+            label="Select Categories"
+            id={PREFERENCE_TYPES.CATEGORIES}
+            options={filterData.categories}
+            value={selectedPreferences.categories}
+            onChange={(e: ChangeEvent<HTMLSelectElement>): void => handleSelectableChange(e, PREFERENCE_TYPES.CATEGORIES)}
+          />
+          <SelectableList
+            label="Select Sources"
+            id={PREFERENCE_TYPES.SOURCES}
+            options={filterData.sources}
+            value={selectedPreferences.sources}
+            onChange={(e: ChangeEvent<HTMLSelectElement>): void => handleSelectableChange(e, PREFERENCE_TYPES.SOURCES)}
+          />
           <button type="button" onClick={handleSavePreferences}>
             Save Preferences
           </button>

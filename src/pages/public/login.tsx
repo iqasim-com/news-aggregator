@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import users from "../../mockDb/mockData.json";
 import { useUser } from "../../context/context.tsx";
 
 const Login = () => {
-  const { setUser } = useUser(); // Use context to set the user globally
+  const { setUser } = useUser()!; // Use context to set the user globally
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = (e: any) => {
     e.preventDefault();
     const user = users.find((user) => user.email === email && user.password === password);
 

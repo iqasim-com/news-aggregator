@@ -6,7 +6,7 @@ import Search from "../pages/secure/search.tsx";
 import {useUser} from "../context/context.tsx";
 
 const AppContent = () => {
-  const {user} = useUser();
+  const {user} = useUser()!;
 
   return (
     <>
