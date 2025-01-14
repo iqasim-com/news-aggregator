@@ -1,48 +1,44 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./navbar-styles.css";
-import {DEFAULT_CONFIG} from "../../config/config.ts";
-import {useUser} from "../../context/context.tsx";
+import { DEFAULT_CONFIG } from "../../config/config.ts";
+import { useUser } from "../../context/context.tsx";
 import Modal from "../modal/modal.tsx";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const {user, setUser, logout, filterData} = useUser();
+  const { user, setUser, logout, filterData } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
 
-  const [selectedAuthor, setSelectedAuthor] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedSource, setSelectedSource] = useState("");
+  const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedSources, setSelectedSources] = useState<string[]>([]);
 
   const handleSavePreferences = () => {
     if (user) {
-      debugger;
       const updatedUser = {
         ...user,
         preferences: {
-          authors: selectedAuthor
-            ? Array.from(new Set([...user.preferences.authors, selectedAuthor]))
-            : user.preferences.authors,
-          categories: selectedCategory
-            ? Array.from(new Set([...user.preferences.categories, selectedCategory]))
-            : user.preferences.categories,
-          sources: selectedSource
-            ? Array.from(new Set([...user.preferences.sources, selectedSource]))
-            : user.preferences.sources,
+          authors: selectedAuthors.length ? selectedAuthors : user.preferences.authors,
+          categories: selectedCategories.length ? selectedCategories : user.preferences.categories,
+          sources: selectedSources.length ? selectedSources : user.preferences.sources,
         },
       };
 
-      // Update user in the state
       setUser(updatedUser);
 
-      // Save updated user to localStorage
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+      localStorage.setItem(`user${user.id}`, JSON.stringify(updatedUser));
       setIsModalOpen(false);
     }
+  };
+
+  const handleMultiSelectChange = (e: React.ChangeEvent<HTMLSelectElement>, setter: React.Dispatch<React.SetStateAction<string[]>>) => {
+    const options = Array.from(e.target.selectedOptions, (option) => option.value);
+    setter(options);
   };
 
   return (
@@ -55,22 +51,16 @@ const Navbar = () => {
           <button onClick={() => setIsModalOpen(true)}>Feed Customization</button>
         </li>
         <li>
-          <Link to="/dashboard" onClick={() => setIsOpen(false)}>
-            Home
-          </Link>
+          <Link to="/dashboard" onClick={() => setIsOpen(false)}>Home</Link>
         </li>
         <li>
-          <Link to="/search" onClick={() => setIsOpen(false)}>
-            Search
-          </Link>
+          <Link to="/search" onClick={() => setIsOpen(false)}>Search</Link>
         </li>
         <li>
-          <Link to="/login" onClick={logout}>
-            Logout
-          </Link>
+          <Link to="/login" onClick={logout}>Logout</Link>
         </li>
         <li>
-          <img src={user?.avatar} width="30" alt={user?.name || "User"}/>
+          <img src={user?.avatar} width="30" alt={user?.name || "User"} />
         </li>
       </ul>
       <div className="navbar-toggle" onClick={toggleNavbar}>
@@ -82,13 +72,13 @@ const Navbar = () => {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Feed Customization">
         <form>
           <div className="custom-select">
-            <label htmlFor="authors">Select Author:</label>
+            <label htmlFor="authors">Select Authors:</label>
             <select
               id="authors"
-              value={selectedAuthor}
-              onChange={(e) => setSelectedAuthor(e.target.value)}
+              multiple
+              value={selectedAuthors}
+              onChange={(e) => handleMultiSelectChange(e, setSelectedAuthors)}
             >
-              <option value="">-- Choose an Author --</option>
               {filterData.authors.map((author, index) => (
                 <option key={index} value={author}>
                   {author}
@@ -98,13 +88,13 @@ const Navbar = () => {
           </div>
 
           <div className="custom-select">
-            <label htmlFor="categories">Select Category:</label>
+            <label htmlFor="categories">Select Categories:</label>
             <select
               id="categories"
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              multiple
+              value={selectedCategories}
+              onChange={(e) => handleMultiSelectChange(e, setSelectedCategories)}
             >
-              <option value="">-- Choose a Category --</option>
               {filterData.categories.map((category, index) => (
                 <option key={index} value={category}>
                   {category}
@@ -114,13 +104,13 @@ const Navbar = () => {
           </div>
 
           <div className="custom-select">
-            <label htmlFor="sources">Select Source:</label>
+            <label htmlFor="sources">Select Sources:</label>
             <select
               id="sources"
-              value={selectedSource}
-              onChange={(e) => setSelectedSource(e.target.value)}
+              multiple
+              value={selectedSources}
+              onChange={(e) => handleMultiSelectChange(e, setSelectedSources)}
             >
-              <option value="">-- Choose a Source --</option>
               {filterData.sources.map((source, index) => (
                 <option key={index} value={source}>
                   {source}

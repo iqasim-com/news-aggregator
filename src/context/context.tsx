@@ -3,6 +3,7 @@ import React, {createContext, useState, useContext} from "react";
 const UserContext = createContext(null);
 
 export const UserProvider = ({children}) => {
+  // TODO: Fix user dynamically here
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
   const [articles, setArticles] = useState([]); // State for articles
   const [filterData, setFilterData] = useState(
@@ -14,7 +15,11 @@ export const UserProvider = ({children}) => {
 
   // Logout function
   const logout = () => {
-    localStorage.removeItem("user"); // Clear user from local storage
+    const updatedUser = {
+      ...user,
+      isLoggedIn: false,
+    };
+    localStorage.setItem(`user${user.id}`, JSON.stringify(updatedUser));
     setUser(null); // Reset user in context
   };
 

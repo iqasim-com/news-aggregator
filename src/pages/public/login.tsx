@@ -17,8 +17,12 @@ const Login = () => {
     const user = users.find((user) => user.email === email && user.password === password);
 
     if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user); // Update the context
+      const updatedUser = {
+        ...user,
+        isLoggedIn: true,
+      };
+      localStorage.setItem(`user${user.id}`, JSON.stringify(updatedUser));
+      setUser(updatedUser); // Update the context
       navigate("/dashboard", { state: { user } });
     } else {
       setError("Invalid email or password");

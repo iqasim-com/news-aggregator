@@ -5,6 +5,21 @@
     "username": "johndoe",
     "email": "johndoe@example.com",
     "password": "password123",
+    "isLoggedIn": false,
+    "avatar": "https://avatar.iran.liara.run/public",
+    "preferences": {
+      "authors": [],
+      "categories": [],
+      "sources": []
+    }
+  },
+  {
+    "id": "na2",
+    "name": "Jane Doe",
+    "username": "janedoe",
+    "email": "janedoe@example.com",
+    "password": "password123",
+    "isLoggedIn": false,
     "avatar": "https://avatar.iran.liara.run/public",
     "preferences": {
       "authors": [],
