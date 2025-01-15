@@ -70,9 +70,9 @@ const Search = () => {
   });
 
   return user ? (
-    <div className="container custom-top-padding">
+    <div className="container">
       <div className="row">
-        <div className="col">
+        <div className="col custom-top-padding">
           <div className="text-center mb-3">
             <h1>Search Articles</h1>
             <InputComponent
@@ -96,11 +96,17 @@ const Search = () => {
       </div>
       <div className="row">
         {isLoading ? (
-          <p>Loading articles...</p>
+          <div className="col">
+            <p>Loading articles...</p>
+          </div>
         ) : errorMessage ? (
-          <p className="error-message">{errorMessage}</p>
+          <div className="col">
+            <p className="error-message">{errorMessage}</p>
+          </div>
         ) : filteredArticles.length === 0 ? (
-          <p>No articles found for your search.</p>
+          <div className="col">
+            <p>No articles found for your search.</p>
+          </div>
         ) : (
           <>
             {filteredArticles.map((article, index) => (

@@ -75,10 +75,8 @@ const Dashboard = () => {
   return (
     <div className="container custom-top-padding">
       <div className="row justify-content-lg-center">
-        <div className="col-lg-6">
-          <div>
-            <h1>Current Customization</h1>
-          </div>
+        <div className="col col-lg-6 custom-top-padding">
+          <h1>Current Customization</h1>
           <div className="preferences d-flex flex-column">
             <div className="preferences d-flex flex-column">
               <PreferencesDisplay
