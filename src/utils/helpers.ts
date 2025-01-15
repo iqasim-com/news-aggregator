@@ -97,7 +97,7 @@ function getSource(url: string) {
  * @param {string} isoString - The ISO 8601 formatted date string to be converted.
  * @return {string} The formatted date string in DD/MM/YYYY format.
  */
-function formatDate(isoString: string) {
+export function formatDate(isoString: string) {
   const date = new Date(isoString); // Convert ISO string to Date object
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Month is 0-based, add 1
   const day = String(date.getDate()).padStart(2, "0"); // Day of the month

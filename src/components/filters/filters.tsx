@@ -11,9 +11,20 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, fetch
   const [filters, setFilters] = useState({ date: "", author: "", category: "", source: "" });
 
   const handleFilterChange = (field: string, value: string) => {
-    const updatedFilters = { ...filters, [field]: value };
+    let formattedValue = value;
+
+    // Convert the value to "MM/DD/YYYY" format for the filters state
+    if (field === "date" && value) {
+      const date = new Date(value);
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+      const day = String(date.getDate()).padStart(2, "0");
+      const year = date.getFullYear();
+      formattedValue = `${month}/${day}/${year}`;
+    }
+
+    const updatedFilters = { ...filters, [field]: formattedValue };
     setFilters(updatedFilters);
-    onFilterChange(updatedFilters); // Notify parent component of filter changes
+    onFilterChange(updatedFilters);
   };
 
   return (
@@ -25,7 +36,11 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onFilterChange, fetch
           <label>Date: </label>
           <input
             type="date"
-            value={filters.date}
+            value={
+              filters.date
+                ? `${filters.date.split("/")[2]}-${filters.date.split("/")[0]}-${filters.date.split("/")[1]}`
+                : "" // Convert "MM/DD/YYYY" to "YYYY-MM-DD" for the input field
+            }
             onChange={(e) => handleFilterChange("date", e.target.value)}
           />
         </div>
