@@ -6,6 +6,9 @@ Welcome to the News Aggregator Application! This project is a frontend web appli
 
 ### [DEMO](https://drive.google.com/drive/folders/1dLniOeW_fIaq6gYE5E4i1rO1X0YU8OZO?usp=sharing)
 
+<img width="1680" alt="image" src="https://github.com/user-attachments/assets/343abd9a-1eb1-4017-a77a-83c5081cfc10" />
+
+
 ## Table of Contents
 1. [Prerequisites](#prerequisites)
 2. [Getting Started](#getting-started)
