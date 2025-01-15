@@ -8,6 +8,7 @@ import FilterComponent from "../../components/filters/filters";
 import {truncateDescription} from "../../utils/helpers";
 import {Link} from "react-router-dom";
 import {Article} from "../../utils/types.ts";
+import {DEFAULT_CONFIG} from "../../config/config.ts";
 
 /**
  * The Search component provides functionality to search for articles based on a search term
@@ -78,7 +79,7 @@ const Search = () => {
               name="searchNews"
               placeholder="Search for Articles"
               onChange={(e) => fetchArticles(e.target.value)}
-              debounceDelay={2000}
+              debounceDelay={DEFAULT_CONFIG.ui.inputDebounceDelay}
               inputClass="input-styles w-50"
               isLoading={isLoading}
             />

@@ -80,24 +80,24 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <Link to="/">{DEFAULT_CONFIG.shortAppName}</Link>
+        <Link to={DEFAULT_CONFIG.ui.routes.home}>{DEFAULT_CONFIG.shortAppName}</Link>
       </div>
       <ul className={`navbar-links ${isNavbarOpen ? "active" : ""}`}>
         <ListItem>
           <Button onClick={() => setIsModalOpen(true)}>Personalize news feed</Button>
         </ListItem>
         <ListItem>
-          <Link to="/dashboard" onClick={() => setIsNavbarOpen(false)}>
+          <Link to={DEFAULT_CONFIG.ui.routes.home} onClick={() => setIsNavbarOpen(false)}>
             Home
           </Link>
         </ListItem>
         <ListItem>
-          <Link to="/search" onClick={() => setIsNavbarOpen(false)}>
+          <Link to={DEFAULT_CONFIG.ui.routes.search} onClick={() => setIsNavbarOpen(false)}>
             Search
           </Link>
         </ListItem>
         <ListItem>
-          <Link to="/login" onClick={logout}>Logout</Link>
+          <Link to={DEFAULT_CONFIG.ui.routes.login} onClick={logout}>Logout</Link>
         </ListItem>
         <ListItem>
           <img src={user?.avatar} width="30" alt={user?.name || "User"}/>

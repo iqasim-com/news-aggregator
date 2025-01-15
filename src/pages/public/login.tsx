@@ -55,7 +55,7 @@ const Login = () => {
       };
       localStorage.setItem(`user${user.id}`, JSON.stringify(updatedUser));
       setUser(updatedUser); // Update the context
-      navigate("/dashboard", { state: { user } });
+      navigate("/home", { state: { user } });
     } else {
       setError("Invalid email or password");
     }

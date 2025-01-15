@@ -24,6 +24,11 @@ export const DEFAULT_CONFIG = {
     },
   },
   ui: {
-    inputDebounceDelay: 2000
+    inputDebounceDelay: 500,
+    routes: {
+      login: '/login',
+      home: '/home',
+      search: '/search'
+    }
   }
 }
