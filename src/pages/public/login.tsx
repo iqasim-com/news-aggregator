@@ -32,6 +32,10 @@ const Login = () => {
     checkConfig();
   }, []);
 
+  /**
+   * The `handleLogin` function is an event handler for managing user login operations.
+   * It prevents the default event behavior and validates user credentials.
+   */
   const handleLogin = (e: any) => {
     e.preventDefault();
 
