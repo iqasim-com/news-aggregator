@@ -1,4 +1,4 @@
-# News Aggregator
+# News Aggregator Application
 
 Welcome to the News Aggregator Application! This project is a frontend web application designed to provide a seamless and user-friendly experience for browsing news articles from multiple sources. The application aggregates articles from various APIs, allowing users to search, filter, and personalize their news feed based on their interests.
 
